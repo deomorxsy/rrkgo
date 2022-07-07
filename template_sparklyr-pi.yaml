@@ -1,0 +1,71 @@
+#
+# Copyright 2017 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: template-sparklyr-pi-00
+  namespace: spark-apps
+spec:
+  sparkConf:
+    "spark.ui.port": "4045"
+    "spark.eventLog.enabled": "true"
+    "spark.eventLog.dir": "/opt/spark/logs/"
+    "spark.history.fs.logDirectory": "/opt/spark/logs/"
+  type: Java
+  mode: cluster
+  image: "gcr.io/datamechanics/custom/sparklyr2"
+  imagePullPolicy: IfNotPresent
+  mainClass: sparklyr.Shell
+  mainApplicationFile: "local:///usr/local/lib/R/site-library/sparklyr/java/sparklyr-master-2.12.jar"
+  arguments:
+  - "8880"
+  - "222"
+  - "--batch"
+  - "/opt/spark/work-dir/R/RExamples.R"
+  sparkVersion: "3.1.1"
+  restartPolicy:
+    type: Never
+  volumes:
+    - name: "spark-data"
+      persistentVolumeClaim:
+        claimName: my-pvc
+    - name: "spark-work"
+      emptyDir: {}
+  driver:
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"
+    labels:
+      version: 3.1.1
+    serviceAccount: spark
+    volumeMounts:
+      - name: "spark-work"
+        mountPath: "/mnt/spark/work"
+  executor:
+    tolerations:
+      - key: Key
+        operator: Equal
+        value: Value
+        effect: NoSchedule
+    cores: 1
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 3.1.1
+    volumeMounts:
+      - name: "spark-data"
+        mountPath: "/mnt/spark/data/"
+      - name: "spark-work"
+        mountPath: "/mnt/spark/work/"
