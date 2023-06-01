@@ -21,8 +21,10 @@ spec:
   sparkConf:
     "spark.ui.port": "4040"
     "spark.eventLog.enabled": "true"
-    "spark.eventLog.dir": "/opt/spark/logs/"
-    "spark.history.fs.logDirectory": "/opt/spark/logs/"
+    #"spark.eventLog.dir": "/opt/spark/logs/"
+    #"spark.history.fs.logDirectory": "/opt/spark/logs/"
+    "spark.eventLog.dir": "/opt/spark/work-dir/R/bibliometrix/spark-logs/"
+    "spark.history.fs.logDirectory": "/opt/spark/work-dir/R/bibliometrix/spark-logs"
   type: Java
   mode: cluster
   image: "localhost:5000/sparklyr-demo-v2:03"
@@ -33,7 +35,8 @@ spec:
   - "8880"
   - "222"
   - "--batch"
-  - "/opt/spark/work-dir/R/blog-v2.R"
+  - "/opt/spark/work-dir/R/bibliometrix/cwa-editing.R"
+  #- "/opt/spark/work-dir/R/blog-v2.R"
   sparkVersion: "3.0.2"
   restartPolicy:
     type: OnFailure

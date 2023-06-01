@@ -1,5 +1,5 @@
-setwd("/mnt/woe-D/Documentos/coding-backup/projetos/rscripts/bib-packrat")
-packrat::on("/mnt/woe-D/Documentos/coding-backup/projetos/rscripts/bib-packrat")
+#setwd("path/to/bib-packrat/dir")
+#packrat::on("path/to/bib-packrat/dir")
 
 library(stringr)
 library(arrow)
@@ -10,14 +10,14 @@ library(bibliometrix)
 #setwd("~/Documentos/coding/projetos/rscripts/bib-packrat")
 #packrat::on("~/Documentos/coding/projetos/rscripts/bib-packrat")
 
-install.packages("bibliometrix")
+#install.packages("bibliometrix")
 
 
 #============
 # Create Spark Session
 #============
 Sys.setenv(SPARK_HOME = "/opt/spark")
-
+#ponte pro spark-submit
 conf <- spark_config()
 conf$sparklyr.defaultPackages <- c(
     "com.amazonaws:aws-java-sdk-pom:1.11.828"
@@ -74,7 +74,9 @@ if (!is.null(sc)) {
 	# Carrega a biblioteca bibliometrix
 	library(bibliometrix)
 	library(dplyr)
-	load("./computer_TI_clean.Rda")
+
+    #full path of the file volume-mounted inside the container
+	load("/opt/spark/work-dir/R/bibliometrix/computer_TI_clean.Rda")
 
 	# Remove linha duplicada
 	M <- M[-c(500),]
@@ -84,30 +86,33 @@ if (!is.null(sc)) {
 	M <- M[-c(3615),]
 	M <- M[-c(4611),]
 
+
+
+
+    # View(M)
+
+    # write.csv(M, "./teste.csv", row.names = FALSE)
+
+    #---code ---
+    #M_slices <- timeslice(M, breaks = c(2010, 2020))
+    #M2011_2020 <- M_slices[[2]]
+
+    #N <- termExtraction(M2011_2020, Field = "AB", ngrams = 2,
+    #                                 stemming=TRUE,language="english",
+    #                                 remove.numbers=TRUE, remove.terms=NULL, keep.terms=NULL, verbose=TRUE)
+
+    #N <- termExtraction(M, Field = "TI", ngrams = 2,
+    #                    stemming=TRUE,language="english",
+    #                    remove.numbers=TRUE, remove.terms=NULL, keep.terms=NULL, verbose=TRUE)
+
+    #---code
+    # Passo 1
+    #NetMatrix <- biblioNetwork(N, analysis="co-occurrences", network="abstracts", sep=";")
+
+
+    # Passo 2
+    # net = networkPlot(NetMatrix, normalize="association", n=30, Title="Test plot", type="fruchterman", size=5, edgesize=5, labelsize=0.7)
+    #---code
+    #net = networkPlot(NetMatrix, normalize="association", n=10, Title="Test plot", type="fruchterman", size=10, edgesize=10, labelsize=0.7)
+
 }
-
-
-# View(M)
-
-# write.csv(M, "./teste.csv", row.names = FALSE)
-
-
-M_slices <- timeslice(M, breaks = c(2010, 2020))
-M2011_2020 <- M_slices[[2]]
-
-N <- termExtraction(M2011_2020, Field = "AB", ngrams = 2,
-                                 stemming=TRUE,language="english",
-                                 remove.numbers=TRUE, remove.terms=NULL, keep.terms=NULL, verbose=TRUE)
-
-#N <- termExtraction(M, Field = "TI", ngrams = 2,
-#                    stemming=TRUE,language="english",
-#                    remove.numbers=TRUE, remove.terms=NULL, keep.terms=NULL, verbose=TRUE)
-
-
-# Passo 1
-NetMatrix <- biblioNetwork(N, analysis="co-occurrences", network="abstracts", sep=";")
-
-
-# Passo 2
-# net = networkPlot(NetMatrix, normalize="association", n=30, Title="Test plot", type="fruchterman", size=5, edgesize=5, labelsize=0.7)
-net = networkPlot(NetMatrix, normalize="association", n=10, Title="Test plot", type="fruchterman", size=10, edgesize=10, labelsize=0.7)

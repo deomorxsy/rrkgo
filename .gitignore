@@ -1,0 +1,20 @@
+# k8s logs
+/components/monitoring/template-logs/*
+/sparklyr-script/bibliometrix/spark-logs/
+
+# monitoring logs
+/components/monitoring/dag-visualization/
+/components/monitoring/full-logs/
+/components/monitoring/prometheus/
+/apps/sparklyr-script/bibliometrix/spark-logs/
+/apps/sparklyr-script/outro/blog-v1.R
+/apps/sparklyr-script/containerfile-logs
+/apps/sparklyr-script/create-dirs.sh
+/apps/sparklyr-script/Dockerfile*
+/apps/sparklyr-script/outro/
+
+# data
+*.rda
+*.csv
+*.log
+#

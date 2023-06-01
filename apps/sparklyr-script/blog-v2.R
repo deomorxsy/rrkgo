@@ -1,4 +1,3 @@
-
 # 2021-06-02
 # Standard R setup + config required for running on Data Mechainics k8s
 # sparklyr: 1.6.3
