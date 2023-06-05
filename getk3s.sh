@@ -44,3 +44,8 @@ sudo ln -s "${PV_DIR_NEW}" "${PV_DIR_OLD}"
 # =======
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="$K3S_VERSION" INSTALL_K3S_EXEC="--kubelet-arg "root-dir=$KUBELET_DIR"" sh -
 sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+
+#
+# Solving problems with x509 cert auth in local environments
+# for userspace apps that read the configfile (kubecolor)
+sudo k3s kubectl config view --raw > ~/.kube/config
