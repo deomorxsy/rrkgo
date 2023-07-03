@@ -67,6 +67,6 @@ RUN ln -fs /usr/local/lib/R/site-library/littler/bin/r /usr/bin/r \
 RUN Rscript -e "install.packages(c('sparklyr', 'tidyverse'), dependencies=TRUE)"
 
 RUN mkdir -p /opt/spark/work-dir/R/ /opt/spark/logs/ /mnt/spark/data/ /mnt/spark/work/
-COPY *.R /opt/spark/work-dir/R/
+COPY ../apps/sparklyr-script/bibliometrix/cwa-editing.R /opt/spark/work-dir/R/
 
 

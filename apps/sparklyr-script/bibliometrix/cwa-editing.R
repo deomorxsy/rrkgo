@@ -7,8 +7,8 @@ library(sparklyr)
 library(dplyr)
 library(tidyverse)
 library(bibliometrix)
-#setwd("~/Documentos/coding/projetos/rscripts/bib-packrat")
-#packrat::on("~/Documentos/coding/projetos/rscripts/bib-packrat")
+#setwd("path/rscripts/bib-packrat")
+#packrat::on("path/rscripts/bib-packrat")
 
 #install.packages("bibliometrix")
 
@@ -20,7 +20,8 @@ Sys.setenv(SPARK_HOME = "/opt/spark")
 #ponte pro spark-submit
 conf <- spark_config()
 conf$sparklyr.defaultPackages <- c(
-    "com.amazonaws:aws-java-sdk-pom:1.11.828"
+    #"com.amazonaws:aws-java-sdk-pom:1.11.828"
+    "com.amazonaws:aws-java-sdk-pom:1.12.500"
 )
 
 conf$spark.home <- "/opt/spark"

@@ -49,7 +49,9 @@ spec:
 
     - name: "spark-code"
       hostPath:
-        path: /home/asari/Documentos/coding/containers/pod-labs/podman/operator/templates/sparklyr-script/
+        #path: /home/asari/Documentos/coding/containers/pod-labs/podman/operator/templates/sparklyr-script/
+        path: $(MOUNT_PATH)
+        readOnly: true
 
   driver:
     cores: 1
