@@ -47,5 +47,25 @@ sudo chmod 644 /etc/rancher/k3s/k3s.yaml
 
 #
 # Solving problems with x509 cert auth in local environments
-# for userspace apps that read the configfile (kubecolor)
+# for userspace apps that read the configfile (kubecolor, helm3)
 sudo k3s kubectl config view --raw > ~/.kube/config
+
+# setup helm3
+#
+#curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/f31d4fb3aacabf6102b3ec9214b3433a3dbf1812/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+# setup krew
+(
+  set -x; cd "$(mktemp -d)" &&
+  OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
+  ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" &&
+  KREW="krew-${OS}_${ARCH}" &&
+  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" &&
+  tar zxvf "${KREW}.tar.gz" &&
+  ./"${KREW}" install krew
+)
+
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"

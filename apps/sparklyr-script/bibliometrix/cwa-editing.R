@@ -46,6 +46,7 @@ conf$sparklyr.connect.aftersubmit <- function() {
   )
 }
 
+# change scala_version to 3.3.0 which is lts
 sc <- spark_connect(config = conf, spark_home = "/opt/spark", scala_version = "2.12.11")
 
 # Access executor env variable
@@ -76,10 +77,10 @@ if (!is.null(sc)) {
 	library(bibliometrix)
 	library(dplyr)
 
-    #full path of the file volume-mounted inside the container
+    #full path of the file volume-mounted inside the container when running on k8s/k3s
 	load("/opt/spark/work-dir/R/bibliometrix/computer_TI_clean.Rda")
 
-	# Remove linha duplicada
+	# Remove duplicate rows
 	M <- M[-c(500),]
 	M <- M[-c(1177),]
 	M <- M[-c(1177),]
