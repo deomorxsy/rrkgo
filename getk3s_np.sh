@@ -102,6 +102,11 @@ echo $(argocd account get-user-info \
         grep argocd-server | awk 'NR==1 {print $3}')" | awk '{print $3}') | \
     ![[grep -q "false"]] && \
     # add cluster to argocd if authenticated
-        argocd cluster add $(sudo k3s kubectl config current-context) \
+        argocd cluster add $(sudo k3s kubectl config current-context) | \
+        [[grep -q "rpc error"]] && \
+        sed -e '/server: /{ s/s/# s/; n; a\' -e 'bash -c "sudo k3s kubectl get -n default endpoints | awk '\''NR==2 {print $2}'\''"/; }' ~/.kube/config
     # send SIGINT to current bash script in execution if not authenticated
     || kill -s="P1990" --pid="$$" #checkout $BASHPID
+
+
+
