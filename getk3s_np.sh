@@ -58,7 +58,7 @@ sudo k3s kubectl config view --raw > ~/.kube/config
 chmod 700 ./components/manifestos/get_helm.sh
 ./components/manifestos/get_helm.sh
 
-# setup krew
+###### setup kubectl's krew plugins and kubectl-trace ######
 (
   set -x; cd "$(mktemp -d)" &&
   OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
@@ -68,10 +68,16 @@ chmod 700 ./components/manifestos/get_helm.sh
   tar zxvf "${KREW}.tar.gz" &&
   ./"${KREW}" install krew
 )
-
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-# setup argocd
+#### install kubectl-trace ###
+sudo k3s kubectl krew install trace
+## install with prebuilt bins
+#curl -L -o kubectl-trace.tar.gz https://github.com/iovisor/kubectl-trace/releases/download/v0.1.0-rc.1/kubectl-trace_0.1.0-rc.1_linux_amd64.tar.gz
+#tar -xvf kubectl-trace.tar.gz
+#mv kubectl-trace /usr/local/bin/kubectl-trace
+
+##### setup argocd #####
 sudo k3s kubectl create namespace argocd
 sudo k3s kubectl apply -n argocd -f ./core/argocd-ops.yaml
 #or
@@ -86,7 +92,7 @@ rm ./argocd-linux-amd64
 # sudo k3s kubectl get svc -n argocd | grep argocd-server | awk 'NR==1 {print $3}'
 
 # port-forward the argocd webserver
-kubectl port-forward svc/argocd-server -n argocd 8080:443
+sudo k3s kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 # set argocd server URI URL, username and password using github as secret store provider
 gh repo secret set ARGOCD_SERVER < $(echo localhost:8080)
@@ -109,4 +115,17 @@ echo $(argocd account get-user-info \
     || kill -s="P1990" --pid="$$" #checkout $BASHPID
 
 
+####### spark-on-k8s-operator #######
 
+# add spark-on-k8s-operator chart
+helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-operator
+# create resources on k3s cluster, which throws error if it already exists, different from apply
+sudo k3s kubectl create -f ./core/main_spark-operator.yaml
+# helm3 with --preserve-env or -E as sudo flag  should be accessible since the k3s context yaml redirect to ~/.kube/config
+sudo -E helm install --replace sparklyr-release spark-operator/spark-operator --namespace spark-operator --set sparkJobNamespace=spark-apps,webhook.enable=true --debug
+# check its status with helm3
+helm status sparkoperator -n sparklyr-release
+
+###### kube-prometheus-stack (w/ grafana) bootstrapping ######
+sudo -E k3s kubectl create namespace kps
+sudo -E helm install --replace prometheus prometheus-community/kube-prometheus-stack --namespace=kps --version 41.7.0 --values ./monitoring/prometheus/limits.yaml --debug
