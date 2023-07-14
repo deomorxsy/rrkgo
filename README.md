@@ -39,7 +39,7 @@ skopeo inspect docker://localhost:5000/sparklyr-demo-v1:01 | jq '[ .LayersData[]
 ```
 
 Explore the image with bash as entrypoint
-````
+```
 podman run --rm -it --entrypoint=/bin/bash localhost:5000/sparklyr-demo-v1:01
 ```
 
