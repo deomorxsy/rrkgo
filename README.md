@@ -8,6 +8,9 @@
 
 ## 1. container observability one-liners
 
+PS: This section is not production-ready, just to test locally the OCI image. Remember Kubelet's CRI have its own registry directory hard-coded when installing the cluster, and hence does not share the same pattern as the OCI ones ([containers-storage.conf(5)](https://web.archive.org/web/20230714001722/https://github.com/containers/storage/blob/01fccaa58f0663931c4295cf66bddae48fc24fcb/docs/containers-storage.conf.5.md)), even using an OCI-compliant high level container runtime such as containerd.
+
+
 Start insecure registry at boot (local usage only)
 ```
 sudo podman run --privileged -d --name registry -p 5000:5000 -v /var/lib/registry:/var/lib/registry --restart=always registry:2
