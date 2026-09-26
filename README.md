@@ -1,5 +1,9 @@
 ## rrkgo
 
+[![Paper DOI](https://img.shields.io/badge/DOI-rrkgo_paper-green)](https://doi.org/10.5281/zenodo.20805234)
+[![rrkgo](https://zenodo.org/badge/DOI/10.5281/zenodo.22977979.svg)](https://doi.org/10.5281/zenodo.22977979)
+
+
 [WIP] Apache Spark workload orchestration with sparklyr package as API and k3s distro as cluster manager. Monorepo prototype bootstrapping with Ansible.
 
 # Debug purposes
