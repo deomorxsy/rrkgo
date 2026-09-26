@@ -96,25 +96,33 @@ if (!is.null(sc)) {
     # write.csv(M, "./teste.csv", row.names = FALSE)
 
     #---code ---
-    #M_slices <- timeslice(M, breaks = c(2010, 2020))
-    #M2011_2020 <- M_slices[[2]]
+    M_slices <- timeslice(M, breaks = c(2010, 2020))
+    M2011_2020 <- M_slices[[2]]
 
-    #N <- termExtraction(M2011_2020, Field = "AB", ngrams = 2,
-    #                                 stemming=TRUE,language="english",
-    #                                 remove.numbers=TRUE, remove.terms=NULL, keep.terms=NULL, verbose=TRUE)
+    N <- termExtraction(M2011_2020, Field = "AB", ngrams = 2,
+                                     stemming=TRUE,language="english",
+                                     remove.numbers=TRUE, remove.terms=NULL, keep.terms=NULL, verbose=TRUE)
 
-    #N <- termExtraction(M, Field = "TI", ngrams = 2,
-    #                    stemming=TRUE,language="english",
-    #                    remove.numbers=TRUE, remove.terms=NULL, keep.terms=NULL, verbose=TRUE)
+    N <- termExtraction(M, Field = "TI", ngrams = 2,
+                        stemming=TRUE,language="english",
+                        remove.numbers=TRUE, remove.terms=NULL, keep.terms=NULL, verbose=TRUE)
 
     #---code
     # Passo 1
-    #NetMatrix <- biblioNetwork(N, analysis="co-occurrences", network="abstracts", sep=";")
+    NetMatrix <- biblioNetwork(N, analysis="co-occurrences", network="abstracts", sep=";")
 
 
     # Passo 2
-    # net = networkPlot(NetMatrix, normalize="association", n=30, Title="Test plot", type="fruchterman", size=5, edgesize=5, labelsize=0.7)
+    net = networkPlot(NetMatrix, normalize="association", n=30, Title="Test plot", type="fruchterman", size=5, edgesize=5, labelsize=0.7)
     #---code
     #net = networkPlot(NetMatrix, normalize="association", n=10, Title="Test plot", type="fruchterman", size=10, edgesize=10, labelsize=0.7)
+
+    png(filename="bibnetplot.png")
+    #plot(net)
+    net = networkPlot(NetMatrix, normalize="association", n=10, Title="Test plot", type="fruchterman", size=10, edgesize=10, labelsize=0.7)
+    plot(net)
+    dev.off
+
+
 
 }
