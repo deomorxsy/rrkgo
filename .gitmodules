@@ -1,0 +1,6 @@
+[submodule "assets/R.nvim"]
+	path = assets/R.nvim
+	url = git@github.com:R-nvim/R.nvim.git
+[submodule "assets/Vim-R"]
+	path = assets/Vim-R
+	url = https://github.com/jalvesaq/Vim-R
