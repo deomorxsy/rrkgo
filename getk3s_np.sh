@@ -124,8 +124,8 @@ sudo k3s kubectl create -f ./core/main_spark-operator.yaml
 # helm3 with --preserve-env or -E as sudo flag  should be accessible since the k3s context yaml redirect to ~/.kube/config
 sudo -E helm install --replace sparklyr-release spark-operator/spark-operator --namespace spark-operator --set sparkJobNamespace=spark-apps,webhook.enable=true --debug
 # check its status with helm3
-helm status sparkoperator -n sparklyr-release
+helm status sparklyr-release -n=spark-operator
 
 ###### kube-prometheus-stack (w/ grafana) bootstrapping ######
 sudo -E k3s kubectl create namespace kps
-sudo -E helm install --replace prometheus prometheus-community/kube-prometheus-stack --namespace=kps --version 41.7.0 --values ./monitoring/prometheus/limits.yaml --debug
+sudo -E helm install --replace prometheus prometheus-community/kube-prometheus-stack --namespace=kps --version 41.7.0 --values ./components/monitoring/prometheus/limits.yaml --debug
