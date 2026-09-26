@@ -35,8 +35,8 @@ spec:
   - "8880"
   - "222"
   - "--batch"
-  - "/opt/spark/work-dir/R/bibliometrix/cwa-editing.R"
-  #- "/opt/spark/work-dir/R/blog-v2.R"
+  #- "/opt/spark/work-dir/R/bibliometrix/cwa-editing.R"
+  - "/opt/spark/work-dir/R/blog-v2.R"
   sparkVersion: "3.0.2"
   restartPolicy:
     type: OnFailure
@@ -49,9 +49,8 @@ spec:
 
     - name: "spark-code"
       hostPath:
-        #path: /home/asari/Documentos/coding/containers/pod-labs/podman/operator/templates/sparklyr-script/
         path: $(MOUNT_PATH)
-        readOnly: true
+        #readOnly: true # "the VolumeMount on the pod spec allows a readonly setup but not on the Volume definition."
 
   driver:
     cores: 1
@@ -65,6 +64,7 @@ spec:
         mountPath: "/mnt/spark/work"
       - name: "spark-code"
         mountPath: "/opt/spark/work-dir/R/"
+        #readOnly: true
   executor:
     tolerations:
       - key: Key
