@@ -3,7 +3,7 @@
 
 library(dplyr)
 
-load("./computer_TI_clean.Rda")
+# load("./computer_TI_clean.Rda")
 
 M <- M[-c(500),]
 M <- M[-c(1177),]
